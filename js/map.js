@@ -15,7 +15,7 @@ $(document).ready(function() {
 		function error(err) {
 			console.warn('ERROR(' + err.code + '): ' + err.message);
 		}
-		// on sucess assins the coords to the userCords var
+		// on sucess assigns the coords to the userCords var
 		function success(pos) {
 			userCords = pos.coords;
 		}
@@ -59,8 +59,9 @@ $(document).ready(function() {
 		// check to see if the user enterd a zip or not. Use URL based on input
 		if (userZip) {
 			// missing error handling for invalid zip
-			accessURL = "https://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=" + userZip;
+			accessURL = 'https://iaspub.epa.gov/enviro/efservice/getEnvirofactsUVHOURLY/ZIP/' + userZip + '/JSON';
 		} else {
+			// need to do a reverse geocoding search, but easier to change to city & state
 			accessURL = "https://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + userCords.latitude + "&lng=" + userCords.longitude;
 		}
 

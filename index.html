@@ -27,9 +27,10 @@
   <body>
 
 	<div id="control">
-		<h2>Find Local Farmers Markets</h2>
-		<p>We'll help you locate your closest farmers markets. Simply choose an option below to begin...</p>
+		<h2>Find Out Your Area's UV Index</h2>
+		<p>Let's see how much sunscreen you should wear. Simply choose an option below to begin...</p>
 		<form method="get" id="chooseZip">
+			<!--could search by city and state instead -->
 			<button type="submit" class="learnButton">Use current location</button>
 			<button type="button" id="searchZip" class="learnButton">Search by Zip Code</button>
 			<div class="clear"></div>
@@ -40,29 +41,13 @@
 			<div class="clear"></div>
 		</form>
 
-		<p>If you've found SeedTip helpful, please help spread the word!</p>
-
-		<div class="social">
-
-			<div class="twitter">
-				<a href="https://twitter.com/share" class="twitter-share-button" data-via="pauldessert">Tweet</a>
-				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-			</div>
-
-			<div class="facebook">
-				<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.seedtip.com&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=21&amp;appId=752601418144350" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px;" allowTransparency="true"></iframe>
-			</div>
-
-
-		</div>
 		<div class="clear"></div>
 		<div id="results"></div>
-		<p>A project by <a href="http://www.pauldessert.com">Paul Dessert</a>.</p>
+		<p>A project inspired by <a href="http://www.pauldessert.com">Paul Dessert</a>.</p>
 	</div>
 
 	<!-- an empty div for the map -->
 	<div id="map-canvas"></div>
-
 
   </body>
 </html>

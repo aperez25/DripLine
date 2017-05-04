@@ -16,10 +16,10 @@ body {
 }
 
 
-.clearfix:after { 
+.clearfix:after {
    content: " ";
-   display: block; 
-   height: 0; 
+   display: block;
+   height: 0;
    clear: both;
 }
 
@@ -73,23 +73,12 @@ ul li{
 
 /* Popup */
 .markerPop{
-	
-}
 
-
-.twitter{
-	float: left;
-}
-
-.facebook{
-	float: left;
-	width: 150px !important;
-	height: 35px !important;
 }
 
 /* tablets and desktop */
 @media only screen and (min-width: 361px) {
-	
+
 	p {
 		margin-bottom: 15px;
 		line-height: 20px;
@@ -113,7 +102,7 @@ ul li{
 		background-color: #6B7283;
 		border: 1px solid #BE757E;
 	}
-	
+
 	.learnButton {
 		margin-top: 10px;
 		margin-bottom: 20px;
@@ -126,10 +115,10 @@ ul li{
 		text-align: center;
 		cursor: pointer;
 	}
-	
+
 	#mc_embed_signup{
 	margin-top: 30px;
-	float: left;   
+	float: left;
 	width: 300px;
 	}
 
@@ -150,16 +139,16 @@ ul li{
 
 /* phones */
 @media only screen and (max-width: 360px) {
-    
+
 	p {
 		margin-bottom: 10px;
 		line-height: 26px;
 	}
-	
+
 	#map-canvas{
 		height: 100%;
 	}
-	
+
 	#control{
 		color: #D8D8DD;
 		padding: 20px 30px 10px 30px;
@@ -172,7 +161,7 @@ ul li{
 		background-color: #6B7283;
 		border: 1px solid #BE757E;
 	}
-	
+
 	.learnButton {
 		float: left;
 		margin: 0px 10px 0px 10px;
@@ -186,7 +175,7 @@ ul li{
 		width: 40%;
 		text-align: center;
 	}
-	
+
 	#mc_embed_signup{
 		display: none;
 	}
