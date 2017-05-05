@@ -1,0 +1,23 @@
+{
+  "name": "dripline",
+  "version": "1.0.0",
+  "description": "site to find local coffee shops",
+  "main": "map.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aperez25/DripLine.git"
+  },
+  "author": "Alice Perez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aperez25/DripLine/issues"
+  },
+  "homepage": "https://github.com/aperez25/DripLine#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "yelp-fusion": "^1.0.3"
+  }
+}
