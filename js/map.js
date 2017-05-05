@@ -1,14 +1,18 @@
-
 $(document).ready(function() {
+/// require config.js
+	// var mykey = config.MY_KEY;
+	// var secretkey = config.SECRET_KEY;
 
-	let marketId = [],
+
+	let dateAndTime
+ = [],
 	allLatlng = [],
 	allMarkers = [],
-	marketName = [],
+	uvValue = [],
 	infowindow = null,
 	pos,
 	userCords,
-	temMarketHolder = [];
+	tempMarkerHolder = [];
 
 	// Start geolocation
 	if (navigator.geolocation) {
@@ -28,13 +32,10 @@ $(document).ready(function() {
 	// end geolcoation
 
 	//Google map options
-	const mapOptions = {
+	let mapOptions = {
 		zoom: 5,
 		center: new google.maps.LatLng(37.09024, -100.712891),
 		panControl: false,
-		panControlOptions: {
-			position: google.maps.ControlPosition.BOTTOM_LEFT
-		},
 		zoomControl: true,
 		zoomControlOptions: {
 			style: google.maps.ZoomControlStyle.LARGE,
@@ -61,7 +62,9 @@ $(document).ready(function() {
 			// missing error handling for invalid zip
 			accessURL = 'https://iaspub.epa.gov/enviro/efservice/getEnvirofactsUVHOURLY/ZIP/' + userZip + '/JSON';
 		} else {
-			// need to do a reverse geocoding search, but easier to change to city & state
+			// NEED TO UPDATE THIS WITH CITY & STATE
+				// make a call to Google Map API, get the city and state, use that to plug in city and state
+					//"administrative_area_level_1"
 			accessURL = "https://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + userCords.latitude + "&lng=" + userCords.longitude;
 		}
 
@@ -72,16 +75,17 @@ $(document).ready(function() {
 			url: accessURL,
 			dataType: 'jsonp',
 			success: function(data) {
+				// UV Index returns array of objects with order, ZIP, DATE_TIME & UV_VALUE properties
 				$.each(data.results, function(i, val){
-					//loop through each returned item and push into marketId
-					marketId.push(val.id);
-					// loop through each returned item and push marketName o
-					marketName.push(val.marketname);
+					//loop through each returned item and push hours into dateAndTime
+					dateAndTime.push(val.DATE_TIME);
+					// loop through each returned item and push UV_VALUE
+					uvValue.push(val.UV_VALUE);
 				});
-
+			// ******NEED TO MODIFY THE BELOW, AS I DON'T NEED TO MAKE A SECOND CALL
 			var counter = 0;
 			// use the id to get query the API again, to return ind market info
-			$.each(marketId, function(k, v) {
+			$.each(dateAndTime, function(k, v) {
 				$.ajax({
 					type: "GET",
 					contentType: "application/json; charset=utf-8",
@@ -99,29 +103,31 @@ $(document).ready(function() {
 
 							// both the lat and long are retuned as one string
 							var split = latLong.split(',');
-							var latitude = split[0];
-							var longitude = split[1];
+							var latitude = parseFloat(split[0]);
+							var longitude = parseFloat(split[1]);
 
 							// set the markets
-							myLatlng = new google.maps.LatLng(latitude, longitude)
+							let myLatlng = new google.maps.LatLng(latitude, longitude)
 							// sets marker parameters
 							allMarkers = new google.maps.Marker({
 								position: myLatlng,
 								// renders the features on the map
 								map: map,
 								// title on mouseover
-								title: marketName[counter],
+								title: uvValue[counter],
 								// styling of info window when clicked
-								html: "<div class='markerPop'>" + '<h1>' + marketName[counter].substring(4) +
+								html: "<div class='markerPop'>" + '<h1>' + uvValue[counter].substring(4) +
 								'</h1>' + '<h3>' + results['Address'] + '</h3>' + '<p>' + 'Products: ' + results['Products'].split(';') + '</p>' + '<p>' + 'Schedule: ' + results['Schedule'] + '</p>' + '</div>'
 							});
 
 							// put all lat long in array. Need this to create a viewport
 							allLatlng.push(myLatlng);
 
-							counter++;
+							// put the markers in an array
+							tempMarkerHolder.push(allMarkers);
 
-					};
+							counter++;
+					}
 
 					// using paramerts set above, adding a click listener to the markers
 					google.maps.event.addListener(allMarkers, 'click', function(){
@@ -148,12 +154,4 @@ $(document).ready(function() {
 		return false; // prevent the form from submitting
 	});
 
-
-
-
-
-
-
 });
-
-
