@@ -1,145 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-const config = {
-  MAP_KEY: 'AIzaSyCMZHADa4cYR7hmu4fv-IZExxM06iUjWkQ',
-  YELP_ID: 'SwVKG-Vxka0AFEGpAZSiDw',
-  YELP_SECRET: 'mfCUsIdU8eM1MHpnagZRlktWcQJudUV860NxzZUn8HRRqoxFd2wmKNTrtnkp5I1i',
-  YELP_TOKEN: 'iVnXizDCSWRw49ou9UJ3ekr8BzIHusKPDiQhxuoIO7f7PFUN9lRZG0lEh9ubQG3q2E09QR1GooAjStGSOgoVD-CjLxw1iEyXyMM6nszamGRhz08BR3x-ceA3X7gLWXYx'
-}
-
-module.exports = config;
-// yelp has display requirements if you use their API
-// https://www.yelp.com/developers/display_requirements
-
-// NOTES ON YELP API:
-// To authenticate API calls with the access token,
-// set the Authorization HTTP header value as Bearer ACCESS_TOKEN.
-
-},{}],2:[function(require,module,exports){
-
-$(document).ready(function() {
-
-const config = require('./config.js');
-const yelp = require('yelp-fusion'),
-	client = yelp.client(config.YELP_TOKEN);
-
-	let coffeeShopInfo = [],
-		allLatlng = [],
-		allMarkers = [],
-		infowindow = null,
-		pos,
-		search,
-		userCords,
-		tempMarkerHolder = [];
-
-	// Start geolocation - could you use a promise here?
-	if (navigator.geolocation) {
-		function error(err) {
-			console.warn('ERROR(' + err.code + '): ' + err.message);
-		}
-		// on success assigns the coords to the userCords var
-		function success(pos) {
-			userCords = pos.coords;
-		}
-		// get the user's current position
-		navigator.geolocation.getCurrentPosition(success, error);
-	} else {
-		alert('Geolocation is not supported in your browser');
-	}
-	// end geolcoation
-
-	//Google map options
-	let mapOptions = {
-		zoom: 5,
-		center: new google.maps.LatLng(37.09024, -100.712891),
-		panControl: false,
-		zoomControl: true,
-		zoomControlOptions: {
-			style: google.maps.ZoomControlStyle.LARGE,
-			position: google.maps.ControlPosition.RIGHT_CENTER
-		},
-		scaleControl: false
-	};
-
-	// adding infowindow option
-	infowindow = new google.maps.InfoWindow({
-		content: "holding..."
-	});
-
-	// Fire up Google maps and place inside the map-canvas div
-	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-	// grab form data
-	$('#chooseZip').submit(function() {
-		let userZip = $('#textZip').val();
-		// check to see if the user entered a zip or not. (MAKE A TERNARY?)
-		if (userZip) {
-			search = client.search({
-			term: "coffee shop",
-			location: userZip,
-			radius: 8047
-		});
-		} else {
-			search = client.search({
-			term: "coffee shop",
-			latitude: userCords.latitude,
-			longitude: userCords.longtiude,
-			radius: 8047
-		});
-	}
-});
-	// use Yelp's response
-	search.then(response => {
-		response.jsonBody.businesses.forEach(function(shop) {
-			// add pertinent info into array
-			coffeeShopInfo.push({
-				name: shop.name,
-				url: shop.url,
-				rating: shop.rating,
-				price: shop.price,
-				latitude: shop.latitude,
-				longitude: shop.longtiude,
-				address: shop.display_address
-				})
-		})}).then(response => {
-			coffeeShopInfo.forEach(function(shop){
-				let myLatlng = new google.maps.LatLng(shop.latitude, shop.longitude)
-				// sets marker parameters
-				allMarkers = new google.maps.Marker({
-					position: myLatlng,
-					map: map,
-					// styling of info window when clicked
-					html: "<div class='markerPop'>" + '<h1>' + shop.title +
-					'</h1>' + '<h3>' + 'Address: ' + shop.address + '</h3>' + '<p>' + 'Rating: ' + shop.rating + '</p>' + '<p>' + 'Price: ' + shop.price + '</p>' + '</div>'
-				});
-				// put all lat long in array. Need this to create a viewport
-				allLatlng.push(myLatlng);
-				// put the markers in an array
-				tempMarkerHolder.push(allMarkers);
-			});
-		})
-		.catch(console.log);
-
-		// using parameters set above, adding a click listener to the markers
-		google.maps.event.addListener(allMarkers, 'click', function(){
-			infowindow.setContent(this.html);
-			infowindow.open(map, this);
-		});
-		// from the allLatlng array, show the markers in a new viewpoint bound
-		var bounds = new google.maps.LatLngBounds();
-		// go through each...
-		for(var i = 0, LtLgLen = allLatlng.length; i < LtLgLen; i++) {
-			// increase the bound to take this point
-			bounds.extend(allLatlng[i]);
-		}
-			// fit thes bounds to the map
-			map.fitBounds(bounds);
-		return false; // prevent the form from submitting
-
-});
-
-
-
-},{"./config.js":1,"yelp-fusion":26}],3:[function(require,module,exports){
 'use strict';
 
 const _defaultOptions = require('./request-filters/default-options');
@@ -159,7 +18,7 @@ const defaultFilters = () => [
 ];
 
 module.exports = defaultFilters;
-},{"./request-filters/bearer-token":8,"./request-filters/default-options":9,"./request-filters/json-body":10,"./request-filters/query":11,"./request-filters/url-params":12,"./request-filters/urlencoded-body":13}],4:[function(require,module,exports){
+},{"./request-filters/bearer-token":6,"./request-filters/default-options":7,"./request-filters/json-body":8,"./request-filters/query":9,"./request-filters/url-params":10,"./request-filters/urlencoded-body":11}],2:[function(require,module,exports){
 'use strict';
 const _unhandledStatusFilter = require('./response-filters/unhandled-status');
 const _jsonBodyFilter = require('./response-filters/json-body');
@@ -170,7 +29,7 @@ const defaultFilters = () => [
 ];
 
 module.exports = defaultFilters;
-},{"./response-filters/json-body":14,"./response-filters/unhandled-status":15}],5:[function(require,module,exports){
+},{"./response-filters/json-body":12,"./response-filters/unhandled-status":13}],3:[function(require,module,exports){
 'use strict';
 
 const _caseless = require('caseless');
@@ -202,7 +61,7 @@ module.exports = {
   setHeaderIfNotExist: setHeaderIfNotExist,
   setContentTypeIfNotExist: setContentTypeIfNotExist
 };
-},{"caseless":16}],6:[function(require,module,exports){
+},{"caseless":14}],4:[function(require,module,exports){
 'use strict';
 
 const _smallRequest = require('small-request');
@@ -227,7 +86,7 @@ const send = (request, requestFilters, responseFilters) => {
 
 module.exports = send;
 
-},{"./default-request-filters":3,"./default-response-filters":4,"./process-filters":7,"small-request":20}],7:[function(require,module,exports){
+},{"./default-request-filters":1,"./default-response-filters":2,"./process-filters":5,"small-request":18}],5:[function(require,module,exports){
 'use strict';
 
 const processFilters = (context, filters) => {
@@ -239,7 +98,7 @@ const processFilters = (context, filters) => {
 };
 
 module.exports = processFilters;
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 const _headers = require('../headers');
@@ -256,7 +115,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"../headers":5}],9:[function(require,module,exports){
+},{"../headers":3}],7:[function(require,module,exports){
 'use strict';
 
 const defaultOptions = () => {
@@ -272,7 +131,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 const _caseless = require('caseless');
@@ -293,7 +152,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"../headers":5,"caseless":16}],11:[function(require,module,exports){
+},{"../headers":3,"caseless":14}],9:[function(require,module,exports){
 'use strict';
 
 const _url = require('url');
@@ -313,7 +172,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"url":60}],12:[function(require,module,exports){
+},{"url":60}],10:[function(require,module,exports){
 'use strict';
 
 const _stringTemplate = require('string-template');
@@ -338,7 +197,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"string-template":24,"url":60}],13:[function(require,module,exports){
+},{"string-template":22,"url":60}],11:[function(require,module,exports){
 'use strict';
 
 const _caseless = require('caseless');
@@ -361,7 +220,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"../headers":5,"caseless":16,"querystring":45}],14:[function(require,module,exports){
+},{"../headers":3,"caseless":14,"querystring":45}],12:[function(require,module,exports){
 'use strict';
 
 const filter = (response) => {
@@ -376,7 +235,7 @@ const filter = (response) => {
 module.exports = {
   filter: filter
 };
-},{}],15:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 const _TypedError = require('error/typed');
 
@@ -401,7 +260,7 @@ module.exports = {
   filter: filter,
   unhandledStatusError: error
 };
-},{"error/typed":18}],16:[function(require,module,exports){
+},{"error/typed":16}],14:[function(require,module,exports){
 function Caseless (dict) {
   this.dict = dict || {}
 }
@@ -469,7 +328,7 @@ module.exports.httpify = function (resp, headers) {
   return c
 }
 
-},{}],17:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var nargs = /\{([0-9a-zA-Z]+)\}/g
 var slice = Array.prototype.slice
 
@@ -505,7 +364,7 @@ function template(string) {
     })
 }
 
-},{}],18:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var template = require('string-template');
@@ -573,7 +432,7 @@ function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-},{"assert":27,"string-template":17,"xtend/mutable":25}],19:[function(require,module,exports){
+},{"assert":27,"string-template":15,"xtend/mutable":23}],17:[function(require,module,exports){
 'use strict';
 const http = require('http');
 const https = require('https');
@@ -610,7 +469,7 @@ module.exports = {
   fromUrl: fromUrl,
   unknownProtocolErrorType: unknownProtocolErrorType
 };
-},{"error/typed":18,"http":55,"https":35,"url":60}],20:[function(require,module,exports){
+},{"error/typed":16,"http":55,"https":35,"url":60}],18:[function(require,module,exports){
 'use strict';
 
 const _send = require('./send');
@@ -619,7 +478,7 @@ module.exports = {
   send: _send
 };
 
-},{"./send":22}],21:[function(require,module,exports){
+},{"./send":20}],19:[function(require,module,exports){
 'use strict';
 
 const responseHandler = (response, resolve, reject) => {
@@ -643,7 +502,7 @@ const responseHandler = (response, resolve, reject) => {
 };
 
 module.exports = responseHandler;
-},{}],22:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 const _requestFunction = require('request-function');
@@ -674,7 +533,7 @@ const send = (requestModel) => {
 };
 
 module.exports = send;
-},{"./response-handler":21,"./to-request-options":23,"request-function":19}],23:[function(require,module,exports){
+},{"./response-handler":19,"./to-request-options":21,"request-function":17}],21:[function(require,module,exports){
 'use strict';
 
 const _url = require('url');
@@ -688,7 +547,7 @@ const toRequestOptions = (requestModel) =>{
 };
 
 module.exports = toRequestOptions;
-},{"url":60}],24:[function(require,module,exports){
+},{"url":60}],22:[function(require,module,exports){
 var nargs = /\{([0-9a-zA-Z_]+)\}/g
 
 module.exports = template
@@ -726,7 +585,7 @@ function template(string) {
     })
 }
 
-},{}],25:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -745,7 +604,7 @@ function extend(target) {
     return target
 }
 
-},{}],26:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 const _send = require('@tonybadguy/call-me-maybe');
@@ -832,7 +691,186 @@ module.exports = {
   accessToken: accessToken
 };
 
-},{"@tonybadguy/call-me-maybe":6}],27:[function(require,module,exports){
+},{"@tonybadguy/call-me-maybe":4}],25:[function(require,module,exports){
+const yelp = require('./yelp.js')
+
+$(document).ready(function() {
+
+	let allLatlng = [],
+		allMarkers = [],
+		infowindow = null,
+		tempMarkerHolder = [];
+
+	//Google map options
+	let mapOptions = {
+		zoom: 5,
+		center: new google.maps.LatLng(37.09024, -100.712891),
+		panControl: false,
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.LARGE,
+			position: google.maps.ControlPosition.RIGHT_CENTER
+		},
+		scaleControl: false
+	};
+
+	// adding infowindow option
+	infowindow = new google.maps.InfoWindow({
+		content: "holding..."
+	});
+
+	// Fire up Google maps and place inside the map-canvas div
+	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+		// use ajax ?
+// $.ajax({
+// 			type: 'GET',
+// 			url: ''localhost/3000',
+// 			dataType: 'html' })
+// .done(function(data) {
+//   $('#container').html(data);
+// })
+// .fail(function() {
+//   console.log("Something went wrong!");
+// });
+
+//	return Yelp's response here
+		// yelp.then(array => {
+		// 	array.forEach(function(shop){
+		// 		let myLatlng = new google.maps.LatLng(shop.latitude, shop.longitude)
+		// 		// sets marker parameters
+		// 		allMarkers = new google.maps.Marker({
+		// 			position: myLatlng,
+		// 			map: map,
+		// 			// styling of info window when clicked
+		// 			html: "<div class='markerPop'>" + '<h1>' + shop.title +
+		// 			'</h1>' + '<h3>' + 'Address: ' + shop.address + '</h3>' + '<p>' + 'Rating: ' + shop.rating + '</p>' + '<p>' + 'Price: ' + shop.price + '</p>' + '</div>'
+		// 		});
+		// 		// put all lat long in array. Need this to create a viewport
+		// 		allLatlng.push(myLatlng);
+		// 		// put the markers in an array
+		// 		tempMarkerHolder.push(allMarkers);
+		// 	});
+		// })
+		// .catch(console.log);
+
+		// // using parameters set above, adding a click listener to the markers
+		// google.maps.event.addListener(allMarkers, 'click', function(){
+		// 	infowindow.setContent(this.html);
+		// 	infowindow.open(map, this);
+		// });
+		// // from the allLatlng array, show the markers in a new viewpoint bound
+		// var bounds = new google.maps.LatLngBounds();
+		// // go through each...
+		// for (var i = 0, LtLgLen = allLatlng.length; i < LtLgLen; i++) {
+		// 	// increase the bound to take this point
+		// 	bounds.extend(allLatlng[i]);
+		// }
+		// 	// fit thes bounds to the map
+		// 	map.fitBounds(bounds);
+
+// });
+
+
+});
+
+
+},{"./yelp.js":26}],26:[function(require,module,exports){
+const yelp = require('yelp-fusion'),
+	client = yelp.client(config.YELP_TOKEN);
+
+let userLocation;
+// coffeeShopInfo = [];
+
+// need to listen for the user location....resolved with proper routing...
+  if (navigator.geolocation) {
+    function error(err) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    }
+    // on sucess assins the coords to the userCords var
+    function success(pos) {
+      userLocation = pos.coords;
+    }
+  // get the user's current position
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    alert('Geolocation is not supported in your browser');
+  }
+
+  $('#chooseZip').submit(function() {
+  let zipCode = $('#textZip').val();
+  let isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipCode);
+    if (isValidZip) userLocation = zipCode;
+    return false; // prevent the form from submitting
+  });
+
+
+
+// function yelpSearch(location) {
+// 	if (typeof location === 'object') {
+// 		return client.search({
+// 			term: "coffee shop",
+// 			latitude: location.latitude,
+// 			longitude: location.longtiude,
+// 			radius: 8047
+// 		});
+// 	} else {
+// 		return client.search({
+// 			term: "coffee shop",
+// 			location: location,
+// 			radius: 8047
+// 		});
+// 	}
+// }
+
+// // returns promise from Yelp's API depending on whether user provides coords or zipcode
+// function locationType(location) {
+// 	if (typeof location === 'object') {
+// 		return client.search({
+// 			term: "coffee shop",
+// 			latitude: location.latitude,
+// 			longitude: location.longtiude,
+// 			radius: 8047
+// 		});
+// 	} else {
+// 		return client.search({
+// 			term: "coffee shop",
+// 			location: location,
+// 			radius: 8047
+// 		});
+// 	}
+// }
+
+// var confirmLocation = new Promise(
+//   function(resolve, reject) {
+//   if (userLocation) resolve(userLocation);
+//   else {
+//     var err = new Error('location not set');
+//     reject(err);
+//   }
+//   });
+
+// let coffeeShops =
+//   confirmLocation.then(yelpSearch)
+//   .then(stores => {
+//     stores.jsonBody.businesses.forEach(function(shop) {
+//       // add pertinent info into array
+//       coffeeShopInfo.push({
+//         name: shop.name,
+//         url: shop.url,
+//         rating: shop.rating,
+//         price: shop.price,
+//         latitude: shop.latitude,
+//         longitude: shop.longtiude,
+//         address: shop.display_address
+//       })
+//       return coffeeShopInfo;
+//     })
+//   }).catch(console.error);
+
+//   module.exports = coffeeShops;
+
+},{"yelp-fusion":24}],27:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -9111,4 +9149,4 @@ function extend() {
     return target
 }
 
-},{}]},{},[2]);
+},{}]},{},[25]);

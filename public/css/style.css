@@ -49,6 +49,7 @@ h1 {
 
 h2 {
 	font-size: 26px;
+	text-align: center;
 }
 
 h3 {
@@ -66,15 +67,18 @@ ul li{
 	line-height: 1.9;
 }
 
+#textZip {
+	background-color: white;
+}
 
 .zipSearch{
-	display: none;
+	display: block;
 }
 
-/* Popup */
+ /*Popup
 .markerPop{
 
-}
+}*/
 
 /* tablets and desktop */
 @media only screen and (min-width: 361px) {
@@ -82,6 +86,7 @@ ul li{
 	p {
 		margin-bottom: 15px;
 		line-height: 20px;
+		/*text-align: center;*/
 	}
 
 	#map-canvas{
@@ -99,12 +104,13 @@ ul li{
 		width: 100%;
 		height: 40px;
 		font-size: 24px;
-		background-color: #6B7283;
+		background-color: white;
 		border: 1px solid #BE757E;
 	}
 
 	.learnButton {
-		margin-top: 10px;
+		float: left;
+		margin-top: 0px 10px 0px 10px;
 		margin-bottom: 20px;
 		background: #BE757E;
 		border: 0;
