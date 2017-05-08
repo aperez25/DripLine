@@ -3,13 +3,14 @@ bodyParser = require('body-parser'),
 morgan = require('morgan'),
 nunjucks = require('nunjucks'),
 cors = require('cors'),
-maps = require('./public/js/map.js');
-let app = express();
+//maps = require('./public/js/map.js');
+app = express();
 
 app.use(express.static('public'));
 
-var env = nunjucks.configure('views', { noCache: true });
+var env = nunjucks.configure('public', { noCache: true });
 app.engine('html', nunjucks.render);
+app.set('views', __dirname + '/public');
 app.set('view engine', 'html');
 
 app.use(morgan('dev'));
@@ -21,12 +22,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.get('/', function(req, res, next){
-  res.render('index')
+  res.render('js/index')
   .catch(next)
 })
 
 app.post('/', function(req, res, next) {
-
+  res.render('js/index')
+  .catch(next)
 })
 
 
