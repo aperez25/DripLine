@@ -172,7 +172,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"url":60}],10:[function(require,module,exports){
+},{"url":61}],10:[function(require,module,exports){
 'use strict';
 
 const _stringTemplate = require('string-template');
@@ -197,7 +197,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"string-template":22,"url":60}],11:[function(require,module,exports){
+},{"string-template":22,"url":61}],11:[function(require,module,exports){
 'use strict';
 
 const _caseless = require('caseless');
@@ -220,7 +220,7 @@ const filter = (request) => {
 module.exports = {
   filter: filter
 };
-},{"../headers":3,"caseless":14,"querystring":45}],12:[function(require,module,exports){
+},{"../headers":3,"caseless":14,"querystring":46}],12:[function(require,module,exports){
 'use strict';
 
 const filter = (response) => {
@@ -432,7 +432,7 @@ function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-},{"assert":27,"string-template":15,"xtend/mutable":23}],17:[function(require,module,exports){
+},{"assert":28,"string-template":15,"xtend/mutable":23}],17:[function(require,module,exports){
 'use strict';
 const http = require('http');
 const https = require('https');
@@ -469,7 +469,7 @@ module.exports = {
   fromUrl: fromUrl,
   unknownProtocolErrorType: unknownProtocolErrorType
 };
-},{"error/typed":16,"http":55,"https":35,"url":60}],18:[function(require,module,exports){
+},{"error/typed":16,"http":56,"https":36,"url":61}],18:[function(require,module,exports){
 'use strict';
 
 const _send = require('./send');
@@ -547,7 +547,7 @@ const toRequestOptions = (requestModel) =>{
 };
 
 module.exports = toRequestOptions;
-},{"url":60}],22:[function(require,module,exports){
+},{"url":61}],22:[function(require,module,exports){
 var nargs = /\{([0-9a-zA-Z_]+)\}/g
 
 module.exports = template
@@ -692,6 +692,21 @@ module.exports = {
 };
 
 },{"@tonybadguy/call-me-maybe":4}],25:[function(require,module,exports){
+const config = {
+  MAP_KEY: 'AIzaSyDMNirrISQmV8IQFEcMZ2vstcoK6klNJnY',
+  YELP_ID: 'SwVKG-Vxka0AFEGpAZSiDw',
+  YELP_SECRET: 'mfCUsIdU8eM1MHpnagZRlktWcQJudUV860NxzZUn8HRRqoxFd2wmKNTrtnkp5I1i',
+  YELP_TOKEN: 'iVnXizDCSWRw49ou9UJ3ekr8BzIHusKPDiQhxuoIO7f7PFUN9lRZG0lEh9ubQG3q2E09QR1GooAjStGSOgoVD-CjLxw1iEyXyMM6nszamGRhz08BR3x-ceA3X7gLWXYx'
+}
+
+// yelp has display requirements if you use their API
+// https://www.yelp.com/developers/display_requirements
+
+// NOTES ON YELP API:
+// To authenticate API calls with the access token,
+// set the Authorization HTTP header value as Bearer ACCESS_TOKEN.
+
+},{}],26:[function(require,module,exports){
 const yelp = require('./yelp.js')
 
 $(document).ready(function() {
@@ -735,52 +750,51 @@ $(document).ready(function() {
 // });
 
 //	return Yelp's response here
-		// yelp.then(array => {
-		// 	array.forEach(function(shop){
-		// 		let myLatlng = new google.maps.LatLng(shop.latitude, shop.longitude)
-		// 		// sets marker parameters
-		// 		allMarkers = new google.maps.Marker({
-		// 			position: myLatlng,
-		// 			map: map,
-		// 			// styling of info window when clicked
-		// 			html: "<div class='markerPop'>" + '<h1>' + shop.title +
-		// 			'</h1>' + '<h3>' + 'Address: ' + shop.address + '</h3>' + '<p>' + 'Rating: ' + shop.rating + '</p>' + '<p>' + 'Price: ' + shop.price + '</p>' + '</div>'
-		// 		});
-		// 		// put all lat long in array. Need this to create a viewport
-		// 		allLatlng.push(myLatlng);
-		// 		// put the markers in an array
-		// 		tempMarkerHolder.push(allMarkers);
-		// 	});
-		// })
-		// .catch(console.log);
+		yelp().then(array => {
+			array.forEach(function(shop){
+				let myLatlng = new google.maps.LatLng(shop.latitude, shop.longitude)
+				// sets marker parameters
+				allMarkers = new google.maps.Marker({
+					position: myLatlng,
+					map: map,
+					// styling of info window when clicked
+					html: "<div class='markerPop'>" + '<h1>' + shop.title +
+					'</h1>' + '<h3>' + 'Address: ' + shop.address + '</h3>' + '<p>' + 'Rating: ' + shop.rating + '</p>' + '<p>' + 'Price: ' + shop.price + '</p>' + '</div>'
+				});
+				// put all lat long in array. Need this to create a viewport
+				allLatlng.push(myLatlng);
+				// put the markers in an array
+				tempMarkerHolder.push(allMarkers);
+			});
+		})
+		.catch(console.log);
 
-		// // using parameters set above, adding a click listener to the markers
-		// google.maps.event.addListener(allMarkers, 'click', function(){
-		// 	infowindow.setContent(this.html);
-		// 	infowindow.open(map, this);
-		// });
-		// // from the allLatlng array, show the markers in a new viewpoint bound
-		// var bounds = new google.maps.LatLngBounds();
-		// // go through each...
-		// for (var i = 0, LtLgLen = allLatlng.length; i < LtLgLen; i++) {
-		// 	// increase the bound to take this point
-		// 	bounds.extend(allLatlng[i]);
-		// }
-		// 	// fit thes bounds to the map
-		// 	map.fitBounds(bounds);
-
-// });
-
+		// using parameters set above, adding a click listener to the markers
+		google.maps.event.addListener(allMarkers, 'click', function(){
+			infowindow.setContent(this.html);
+			infowindow.open(map, this);
+		});
+		// from the allLatlng array, show the markers in a new viewpoint bound
+		var bounds = new google.maps.LatLngBounds();
+		// go through each...
+		for (var i = 0, LtLgLen = allLatlng.length; i < LtLgLen; i++) {
+			// increase the bound to take this point
+			bounds.extend(allLatlng[i]);
+		}
+			// fit thes bounds to the map
+			map.fitBounds(bounds);
 
 });
 
 
-},{"./yelp.js":26}],26:[function(require,module,exports){
-const yelp = require('yelp-fusion'),
-	client = yelp.client(config.YELP_TOKEN);
 
-let userLocation;
-// coffeeShopInfo = [];
+},{"./yelp.js":27}],27:[function(require,module,exports){
+const config = require('./config.js'),
+  yelp = require('yelp-fusion');
+	let client = yelp.client(config.YELP_TOKEN);
+
+let userLocation,
+coffeeShopInfo = [];
 
 // need to listen for the user location....resolved with proper routing...
   if (navigator.geolocation) {
@@ -797,80 +811,83 @@ let userLocation;
     alert('Geolocation is not supported in your browser');
   }
 
+function exportShops() {
   $('#chooseZip').submit(function() {
   let zipCode = $('#textZip').val();
   let isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipCode);
     if (isValidZip) userLocation = zipCode;
-    return false; // prevent the form from submitting
+
+   function yelpSearch(location) {
+  console.log('Location found!')
+	if (typeof location === 'object') {
+		return client.search({
+			term: "coffee shop",
+			latitude: location.latitude,
+			longitude: location.longtiude,
+			radius: 8047
+		});
+	} else {
+		return client.search({
+			term: "coffee shop",
+			location: location,
+			radius: 8047
+		});
+	}
+}
+
+// returns promise from Yelp's API depending on whether user provides coords or zipcode
+function locationType(location) {
+  console.log('location type initiated!');
+	if (typeof location === 'object') {
+		return client.search({
+			term: "coffee shop",
+			latitude: location.latitude,
+			longitude: location.longtiude,
+			radius: 8047
+		});
+	} else {
+		return client.search({
+			term: "coffee shop",
+			location: location,
+			radius: 8047
+		});
+	}
+}
+
+var confirmLocation = new Promise(
+  function(resolve, reject) {
+  if (userLocation) resolve(userLocation);
+  else {
+    var err = new Error('location not set');
+    reject(err);
+  }
   });
 
+  confirmLocation.then(yelpSearch)
+  .then(stores => {
+    console.log('looking for stores!');
+    stores.jsonBody.businesses.forEach(function(shop) {
+      // add pertinent info into array
+      coffeeShopInfo.push({
+        name: shop.name,
+        url: shop.url,
+        rating: shop.rating,
+        price: shop.price,
+        latitude: shop.latitude,
+        longitude: shop.longtiude,
+        address: shop.display_address
+      })
+      return coffeeShopInfo;
+    })
+  }).catch(console.error);
+    return false; // prevent the form from submitting
 
+  });
 
-// function yelpSearch(location) {
-// 	if (typeof location === 'object') {
-// 		return client.search({
-// 			term: "coffee shop",
-// 			latitude: location.latitude,
-// 			longitude: location.longtiude,
-// 			radius: 8047
-// 		});
-// 	} else {
-// 		return client.search({
-// 			term: "coffee shop",
-// 			location: location,
-// 			radius: 8047
-// 		});
-// 	}
-// }
+}
+  module.exports = exportShops;
 
-// // returns promise from Yelp's API depending on whether user provides coords or zipcode
-// function locationType(location) {
-// 	if (typeof location === 'object') {
-// 		return client.search({
-// 			term: "coffee shop",
-// 			latitude: location.latitude,
-// 			longitude: location.longtiude,
-// 			radius: 8047
-// 		});
-// 	} else {
-// 		return client.search({
-// 			term: "coffee shop",
-// 			location: location,
-// 			radius: 8047
-// 		});
-// 	}
-// }
-
-// var confirmLocation = new Promise(
-//   function(resolve, reject) {
-//   if (userLocation) resolve(userLocation);
-//   else {
-//     var err = new Error('location not set');
-//     reject(err);
-//   }
-//   });
-
-// let coffeeShops =
-//   confirmLocation.then(yelpSearch)
-//   .then(stores => {
-//     stores.jsonBody.businesses.forEach(function(shop) {
-//       // add pertinent info into array
-//       coffeeShopInfo.push({
-//         name: shop.name,
-//         url: shop.url,
-//         rating: shop.rating,
-//         price: shop.price,
-//         latitude: shop.latitude,
-//         longitude: shop.longtiude,
-//         address: shop.display_address
-//       })
-//       return coffeeShopInfo;
-//     })
-//   }).catch(console.error);
-
-//   module.exports = coffeeShops;
-
-},{"yelp-fusion":24}],27:[function(require,module,exports){
+},{"./config.js":25,"yelp-fusion":24}],28:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1364,7 +1381,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"util/":65}],28:[function(require,module,exports){
+},{"util/":66}],29:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1480,9 +1497,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],29:[function(require,module,exports){
-
 },{}],30:[function(require,module,exports){
+
+},{}],31:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1594,7 +1611,7 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"buffer":31}],31:[function(require,module,exports){
+},{"buffer":32}],32:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -3302,7 +3319,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":28,"ieee754":36}],32:[function(require,module,exports){
+},{"base64-js":29,"ieee754":37}],33:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -3368,7 +3385,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -3479,7 +3496,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":38}],34:[function(require,module,exports){
+},{"../../is-buffer/index.js":39}],35:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -3783,7 +3800,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var http = require('http')
 var url = require('url')
 
@@ -3816,7 +3833,7 @@ function validateParams (params) {
   return params
 }
 
-},{"http":55,"url":60}],36:[function(require,module,exports){
+},{"http":56,"url":61}],37:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -3902,7 +3919,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -3927,7 +3944,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -3950,14 +3967,14 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -4004,7 +4021,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":41}],41:[function(require,module,exports){
+},{"_process":42}],42:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -4190,7 +4207,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -4727,7 +4744,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4813,7 +4830,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4900,13 +4917,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":43,"./encode":44}],46:[function(require,module,exports){
+},{"./decode":44,"./encode":45}],47:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -4982,7 +4999,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":48,"./_stream_writable":50,"core-util-is":33,"inherits":37,"process-nextick-args":40}],47:[function(require,module,exports){
+},{"./_stream_readable":49,"./_stream_writable":51,"core-util-is":34,"inherits":38,"process-nextick-args":41}],48:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -5009,7 +5026,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":49,"core-util-is":33,"inherits":37}],48:[function(require,module,exports){
+},{"./_stream_transform":50,"core-util-is":34,"inherits":38}],49:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -5947,7 +5964,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":46,"./internal/streams/BufferList":51,"./internal/streams/stream":52,"_process":41,"buffer":31,"buffer-shims":30,"core-util-is":33,"events":34,"inherits":37,"isarray":39,"process-nextick-args":40,"string_decoder/":53,"util":29}],49:[function(require,module,exports){
+},{"./_stream_duplex":47,"./internal/streams/BufferList":52,"./internal/streams/stream":53,"_process":42,"buffer":32,"buffer-shims":31,"core-util-is":34,"events":35,"inherits":38,"isarray":40,"process-nextick-args":41,"string_decoder/":54,"util":30}],50:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -6130,7 +6147,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":46,"core-util-is":33,"inherits":37}],50:[function(require,module,exports){
+},{"./_stream_duplex":47,"core-util-is":34,"inherits":38}],51:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -6677,7 +6694,7 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":46,"./internal/streams/stream":52,"_process":41,"buffer":31,"buffer-shims":30,"core-util-is":33,"inherits":37,"process-nextick-args":40,"util-deprecate":62}],51:[function(require,module,exports){
+},{"./_stream_duplex":47,"./internal/streams/stream":53,"_process":42,"buffer":32,"buffer-shims":31,"core-util-is":34,"inherits":38,"process-nextick-args":41,"util-deprecate":63}],52:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('buffer').Buffer;
@@ -6742,10 +6759,10 @@ BufferList.prototype.concat = function (n) {
   }
   return ret;
 };
-},{"buffer":31,"buffer-shims":30}],52:[function(require,module,exports){
+},{"buffer":32,"buffer-shims":31}],53:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":34}],53:[function(require,module,exports){
+},{"events":35}],54:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('buffer').Buffer;
@@ -7019,7 +7036,7 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"buffer":31,"buffer-shims":30}],54:[function(require,module,exports){
+},{"buffer":32,"buffer-shims":31}],55:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = exports;
 exports.Readable = exports;
@@ -7028,7 +7045,7 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":46,"./lib/_stream_passthrough.js":47,"./lib/_stream_readable.js":48,"./lib/_stream_transform.js":49,"./lib/_stream_writable.js":50}],55:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":47,"./lib/_stream_passthrough.js":48,"./lib/_stream_readable.js":49,"./lib/_stream_transform.js":50,"./lib/_stream_writable.js":51}],56:[function(require,module,exports){
 (function (global){
 var ClientRequest = require('./lib/request')
 var extend = require('xtend')
@@ -7110,7 +7127,7 @@ http.METHODS = [
 	'UNSUBSCRIBE'
 ]
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":57,"builtin-status-codes":32,"url":60,"xtend":66}],56:[function(require,module,exports){
+},{"./lib/request":58,"builtin-status-codes":33,"url":61,"xtend":67}],57:[function(require,module,exports){
 (function (global){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
 
@@ -7183,7 +7200,7 @@ function isFunction (value) {
 xhr = null // Help gc
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -7491,7 +7508,7 @@ var unsafeHeaders = [
 ]
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":56,"./response":58,"_process":41,"buffer":31,"inherits":37,"readable-stream":54,"to-arraybuffer":59}],58:[function(require,module,exports){
+},{"./capability":57,"./response":59,"_process":42,"buffer":32,"inherits":38,"readable-stream":55,"to-arraybuffer":60}],59:[function(require,module,exports){
 (function (process,global,Buffer){
 var capability = require('./capability')
 var inherits = require('inherits')
@@ -7677,7 +7694,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./capability":56,"_process":41,"buffer":31,"inherits":37,"readable-stream":54}],59:[function(require,module,exports){
+},{"./capability":57,"_process":42,"buffer":32,"inherits":38,"readable-stream":55}],60:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 
 module.exports = function (buf) {
@@ -7706,7 +7723,7 @@ module.exports = function (buf) {
 	}
 }
 
-},{"buffer":31}],60:[function(require,module,exports){
+},{"buffer":32}],61:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8440,7 +8457,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":61,"punycode":42,"querystring":45}],61:[function(require,module,exports){
+},{"./util":62,"punycode":43,"querystring":46}],62:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -8458,7 +8475,7 @@ module.exports = {
   }
 };
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 (function (global){
 
 /**
@@ -8529,16 +8546,16 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],63:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"dup":37}],64:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"dup":38}],65:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9128,7 +9145,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":64,"_process":41,"inherits":63}],66:[function(require,module,exports){
+},{"./support/isBuffer":65,"_process":42,"inherits":64}],67:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -9149,4 +9166,4 @@ function extend() {
     return target
 }
 
-},{}]},{},[25]);
+},{}]},{},[26]);

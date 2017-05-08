@@ -2,7 +2,8 @@ const express = require('express'),
 bodyParser = require('body-parser'),
 morgan = require('morgan'),
 nunjucks = require('nunjucks'),
-cors = require('cors');
+cors = require('cors'),
+maps = require('./public/js/map.js');
 let app = express();
 
 app.use(express.static('public'));
@@ -19,14 +20,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
 
-// app.get('/', function(req, res, next){
-//   res.render('index')
-//   .catch(next)
-// })
+app.get('/', function(req, res, next){
+  res.render('index')
+  .catch(next)
+})
 
-// app.get('/zip', function(req, res, next) {
-//   res.send(req.params.zip);
-// })
+app.post('/', function(req, res, next) {
+
+})
 
 
 app.use(function (err, req, res, next) {
